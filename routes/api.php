@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClassController;
+use App\Http\Controllers\StudentController;
 use App\Http\Middleware\JwtMiddleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -23,4 +24,10 @@ Route::group(['middleware' => ['api', JwtMiddleware::class, ]], function ($route
     Route::post('/class/store', [ClassController::class, 'store'])->name('class.store');
     Route::get('/class/index', [ClassController::class, 'index'])->name('class.index');
     Route::get('/class/update/{uuid}', [ClassController::class, 'update'])->name('class.update');
+
+    // CLASSES ROUTE
+    Route::post('/student/store', [StudentController::class, 'store'])->name('student.store');
+    Route::get('/student/index', [StudentController::class, 'index'])->name('student.index');
+    Route::put('/student/update/{student_id}', [StudentController::class, 'update'])->name('student.update');
+    Route::put('/student/change/class', [StudentController::class, 'changeClass'])->name('student.change.class');
 });

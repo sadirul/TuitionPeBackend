@@ -64,6 +64,12 @@ class User extends Authenticatable implements JWTSubject
         ];
     }
 
+    public function tuition()
+    {
+        return $this->belongsTo(User::class, 'tuition_id');
+    }
+
+
     public function studentsEnrolled()
     {
         // For teachers/tuitions

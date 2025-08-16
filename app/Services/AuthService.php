@@ -43,12 +43,12 @@ class AuthService
             return response()->json(['status' => 'error', 'msg' => 'Invalid credentials!'], 401);
         }
 
-        $user = Auth::guard('api')->user()->load(['studentInfo']);
+        $user = Auth::guard('api')->user()->load(['studentInfo',]);
         if ($user->status !== 'active') {
             return response()->json(['status' => 'error', 'msg' => 'Account Inactive!'], 401);
         }
 
-        $expirationDate = Carbon::parse($user->expiry_datetime);
+        $expirationDate = Carbon::parse($user->tuition->expiry_datetime);
         if ($expirationDate->isPast()) {
             return response()->json(['status' => 'error', 'msg' => 'Your plan has been expired!'], 401);
         }
