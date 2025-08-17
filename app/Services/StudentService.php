@@ -79,7 +79,6 @@ class StudentService
             ];
         }
 
-
         $students = $query->paginate(25);
 
         return [
@@ -98,7 +97,7 @@ class StudentService
             $user = User::where('uuid', $data['student_id'])->with('studentInfo.class')
                 ->where('tuition_id', $tuition_id)
                 ->where('role', 'student')
-                ->firstOrFail();
+                ->first();
 
             $student = $user->studentInfo;
 
