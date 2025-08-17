@@ -21,7 +21,7 @@ class JwtMiddleware
     {
         try {
             // Attempt to authenticate the user
-            $user = JWTAuth::parseToken()->authenticate()->load(['studentInfo',]);
+            $user = JWTAuth::parseToken()->authenticate()->load(['studentInfo','tuition']);
 
             // Set the authenticated user on the request
             $request->attributes->set('user', $user);
