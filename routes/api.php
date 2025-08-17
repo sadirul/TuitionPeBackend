@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClassController;
+use App\Http\Controllers\FeeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentController;
 use App\Http\Middleware\JwtMiddleware;
@@ -28,7 +29,7 @@ Route::group(['middleware' => ['api', JwtMiddleware::class, ]], function ($route
 
     // CLASSES ROUTE
     Route::post('/student/store', [StudentController::class, 'store'])->name('student.store');
-    Route::get('/student/index', [StudentController::class, 'index'])->name('student.index');
+    Route::get('/student/index/{student_uuid?}', [StudentController::class, 'index'])->name('student.index');
     Route::put('/student/update/{student_id}', [StudentController::class, 'update'])->name('student.update');
     Route::put('/student/change/class', [StudentController::class, 'changeClass'])->name('student.change.class');
     
@@ -37,4 +38,7 @@ Route::group(['middleware' => ['api', JwtMiddleware::class, ]], function ($route
 
     // CHNAGE PASSWORD
     Route::post('/password/update', [ProfileController::class, 'changePassword'])->name('password.update');
+
+    // FEES PAID
+    Route::put('/fee/update/{fee_uuid}', [FeeController::class, 'update'])->name('fee.update');
 });

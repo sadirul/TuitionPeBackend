@@ -63,16 +63,32 @@ class StudentService
         }
     }
 
-    public function index(int $tuition_id)
+    public function index(int $tuition_id, ?string $student_uuid = null)
     {
-        $student = User::with('studentInfo', 'tuition')->where('tuition_id', $tuition_id)->where('role', 'student')->paginate(25);
+        $query = User::with('studentInfo.class', 'studentInfo.fees')
+            ->where('tuition_id', $tuition_id)
+            ->where('role', 'student');
+
+        if ($student_uuid) {
+            $student = $query->where('uuid', $student_uuid)->first();
+
+            return [
+                'status' => $student ? 'success' : 'error',
+                'msg'    => $student ? 'Student fetched successfully' : 'Student not found',
+                'data'   => $student,
+            ];
+        }
+
+
+        $students = $query->paginate(25);
 
         return [
             'status' => 'success',
-            'msg' => 'Student fetched successfully',
-            'data' => $student
+            'msg' => 'Students fetched successfully',
+            'data' => $students
         ];
     }
+
 
     public function update(int $tuition_id, array $data)
     {

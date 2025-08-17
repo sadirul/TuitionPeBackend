@@ -25,9 +25,9 @@ class StudentController extends Controller
         return $this->studentService->store($request->user()->id, $request->validated());
     }
 
-    public function index()
+    public function index(?string $student_uuid = null)
     {
-        return $this->studentService->index($this->request->user()->id);
+        return $this->studentService->index($this->request->user()->id, $student_uuid);
     }
 
     public function update(UpdateStudentRequest $request)
