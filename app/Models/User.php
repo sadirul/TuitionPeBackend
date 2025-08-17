@@ -39,6 +39,7 @@ class User extends Authenticatable implements JWTSubject
         'address',
         'role',
         'expiry_datetime',
+        'upi_id',
     ];
 
     /**
