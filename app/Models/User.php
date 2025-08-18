@@ -94,4 +94,9 @@ class User extends Authenticatable implements JWTSubject
             $this->attributes['password'] = bcrypt($value);
         }
     }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class, 'tuition_id');
+    }
 }
