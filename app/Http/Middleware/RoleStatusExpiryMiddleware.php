@@ -26,12 +26,12 @@ class RoleStatusExpiryMiddleware
         }
 
         if ($user->status !== 'active') {
-            // try {
-            //     JWTAuth::invalidate(JWTAuth::getToken());
-            //     return response()->json(['status' => 'error', 'msg' => 'Account Inactive!'], 401);
-            // } catch (JWTException $e) {
-            //     return response()->json(['error' => 'Something wrong, please try again'], 401);
-            // }
+            try {
+                JWTAuth::invalidate(JWTAuth::getToken());
+                return response()->json(['status' => 'error', 'msg' => 'Account Inactive!'], 401);
+            } catch (JWTException $e) {
+                return response()->json(['error' => 'Something wrong, please try again'], 401);
+            }
             return response()->json(['status' => 'error', 'msg' => 'Account Inactive!'], 401);
         }
         

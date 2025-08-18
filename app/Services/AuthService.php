@@ -49,7 +49,7 @@ class AuthService
         }
 
         $expirationDate = Carbon::parse($user->tuition->expiry_datetime);
-        if ($expirationDate->isPast()) {
+        if ($user->role === 'student' && $expirationDate->isPast()) {
             return response()->json(['status' => 'error', 'msg' => 'Your plan has been expired!'], 401);
         }
 
