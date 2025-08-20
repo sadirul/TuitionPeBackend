@@ -55,6 +55,15 @@ class StudentService
         } catch (Exception $e) {
             DB::rollBack();
 
+            if ($e instanceof \Illuminate\Database\QueryException && $e->getCode() == 23000) {
+                if (str_contains($e->getMessage(), 'users_username_unique')) {
+                    return [
+                        'status' => 'error',
+                        'msg'    => 'Username already exists',
+                    ];
+                }
+            }
+
             return [
                 'status' => 'error',
                 'msg'    => 'Failed to add student',
