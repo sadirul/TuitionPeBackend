@@ -33,7 +33,7 @@ class UpdateProfileRequest extends FormRequest
             'mobile'      => ['sometimes', 'required', 'digits:10', 'numeric'],
             'address'     => ['sometimes', 'required', 'string', 'max:255'],
             'email'       => ['sometimes', 'required', 'email', 'max:255'],
-            'upi_id'       => ['sometimes', 'required', 'string', 'max:100'],
+            'upi_id'       => ['sometimes', 'nullable', 'string', 'max:100'],
         ];
     }
 }
