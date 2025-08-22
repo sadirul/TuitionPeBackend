@@ -99,4 +99,17 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(Payment::class, 'tuition_id');
     }
+
+    // App\Models\User.php
+    public function fees()
+    {
+        return $this->hasManyThrough(
+            Fee::class,           // Final model
+            Student::class,   // Intermediate model
+            'user_id',            // FK on student_infos table
+            'student_id',         // FK on fees table
+            'id',                 // Local key on users table
+            'id'                  // Local key on student_infos table
+        );
+    }
 }

@@ -74,12 +74,15 @@ class StudentService
 
     public function index(int $tuition_id, ?string $student_uuid = null)
     {
-        $query = User::with('studentInfo.class', 'studentInfo.fees')
-            ->where('tuition_id', $tuition_id)
+        $baseQuery = User::where('tuition_id', $tuition_id)
             ->where('role', 'student');
 
+        // ✅ Single student case
         if ($student_uuid) {
-            $student = $query->where('uuid', $student_uuid)->first();
+            $student = $baseQuery
+                ->with(['studentInfo.class', 'studentInfo.fees']) // Full fees data
+                ->where('uuid', $student_uuid)
+                ->first();
 
             return [
                 'status' => $student ? 'success' : 'error',
@@ -88,14 +91,24 @@ class StudentService
             ];
         }
 
-        $students = $query->paginate(25);
+        // ✅ Multiple students case (with unpaid fees count only)
+        $students = $baseQuery
+            ->with(['studentInfo.class'])
+            ->withCount([
+                'fees as unpaid_fees_count' => function ($query) {
+                    $query->where('is_paid', 0);
+                }
+            ])
+            ->paginate(25);
+
 
         return [
             'status' => 'success',
-            'msg' => 'Students fetched successfully',
-            'data' => $students
+            'msg'    => 'Students fetched successfully',
+            'data'   => $students,
         ];
     }
+
 
 
     public function update(int $tuition_id, array $data)
