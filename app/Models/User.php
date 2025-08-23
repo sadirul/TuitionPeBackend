@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -19,6 +21,8 @@ class User extends Authenticatable implements JWTSubject
      *
      * @var list<string>
      */
+    protected $appends = ['is_expired'];
+
     public function getJWTIdentifier()
     {
         return $this->getKey();
@@ -111,5 +115,14 @@ class User extends Authenticatable implements JWTSubject
             'id',                 // Local key on users table
             'id'                  // Local key on student_infos table
         );
+    }
+
+    protected function isExpired(): Attribute
+    {
+        return Attribute::get(function () {
+            return $this->expiry_datetime
+                ? now()->greaterThan($this->expiry_datetime)
+                : false;
+        });
     }
 }

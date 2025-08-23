@@ -5,6 +5,7 @@ use App\Http\Controllers\ClassController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FeeController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PlanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentController;
 use App\Http\Middleware\JwtMiddleware;
@@ -52,4 +53,7 @@ Route::group(['middleware' => ['api', JwtMiddleware::class,]], function ($router
     //RAZORPAY API
     Route::post('/payment/order', [PaymentController::class, 'createOrder'])->name('createOrder');
     Route::post('/payment/verify', [PaymentController::class, 'verifyPayment'])->name('verifyPayment');
+
+    // PLANS
+    Route::get('/plans', [PlanController::class, 'index'])->name('plans.index');
 });

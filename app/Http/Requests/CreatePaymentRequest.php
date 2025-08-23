@@ -35,16 +35,16 @@ class CreatePaymentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'amount' => ['required', 'numeric', 'min:1']
+            'plan_uuid' => ['required', 'uuid', 'exists:plans,uuid'],
         ];
     }
 
     public function messages(): array
     {
         return [
-            'amount.required' => 'Amount is required',
-            'amount.numeric'  => 'Amount must be a number',
-            'amount.min'      => 'Amount must be at least 1 INR',
+            'plan_uuid.required' => 'Plan is required.',
+            'plan_uuid.uuid'      => 'Plan ID must be a valid UUID.',
+            'plan_uuid.exists'    => 'Selected plan does not exist.',
         ];
     }
 }
