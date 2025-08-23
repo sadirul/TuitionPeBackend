@@ -18,6 +18,7 @@ class ProfileService
             $user = User::findOrFail($userId);
 
             $user->update([
+                'tuition_name'    => $data['tuition_name'] ?? $user->tuition_name,
                 'name'    => $data['name'] ?? $user->name,
                 'mobile'  => $data['mobile'] ?? $user->mobile,
                 'address' => $data['address'] ?? $user->address,

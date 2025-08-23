@@ -99,7 +99,7 @@ class StudentService
                     $query->where('is_paid', 0);
                 }
             ])
-            ->paginate(25);
+            ->get();
 
 
         return [
@@ -162,7 +162,10 @@ class StudentService
             return [
                 'status' => 'success',
                 'msg'    => 'Student updated successfully',
-                'data' => $user->fresh()
+                'data'   => $user->fresh([
+                    'studentInfo.class',
+                    'studentInfo.fees' 
+                ])
             ];
         } catch (Exception $e) {
             DB::rollBack();

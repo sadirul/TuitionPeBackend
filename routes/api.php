@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClassController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FeeController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
@@ -25,6 +26,8 @@ Route::group(['middleware' => ['api', JwtMiddleware::class,]], function ($router
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::middleware([RoleStatusExpiryMiddleware::class .  ':tuition'])->group(function () {
+        // DASHBOARD DATA
+        Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dasshboard');
         // CLASSES ROUTE
         Route::post('/class/store', [ClassController::class, 'store'])->name('class.store');
         Route::get('/class/index', [ClassController::class, 'index'])->name('class.index');
