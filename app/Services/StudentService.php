@@ -162,7 +162,7 @@ class StudentService
             return [
                 'status' => 'success',
                 'msg'    => 'Student updated successfully',
-                'data' => $user
+                'data' => $user->fresh()
             ];
         } catch (Exception $e) {
             DB::rollBack();

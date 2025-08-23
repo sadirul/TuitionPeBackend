@@ -61,9 +61,6 @@ class UpdateStudentRequest extends FormRequest
                 'sometimes',
                 'required',
                 'digits:10',
-                Rule::unique('users', 'mobile')
-                    ->where('tuition_id', $this->user()->id)
-                    ->ignore($userId),
             ],
             'address' => 'sometimes|required|string|max:255',
             'guardianName' => 'sometimes|required|string|max:255',
