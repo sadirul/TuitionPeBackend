@@ -4,9 +4,11 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClassController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FeeController;
+use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\StudentController;
 use App\Http\Middleware\JwtMiddleware;
 use App\Http\Middleware\RoleStatusExpiryMiddleware;
@@ -20,6 +22,10 @@ Route::get('/user', function (Request $request) {
 
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/login',    [AuthController::class, 'login'])->name('login');
+
+// PASSWORD RESET
+Route::post('/password/forgot', [ForgotPasswordController::class, 'sendResetLinkEmail']);
+Route::post('/password/reset', [ResetPasswordController::class, 'reset'])->name('password.reset');
 
 
 Route::group(['middleware' => ['api', JwtMiddleware::class,]], function ($router) {
