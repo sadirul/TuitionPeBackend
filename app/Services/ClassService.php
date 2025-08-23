@@ -24,7 +24,9 @@ class ClassService
 
     public function index(int $tuition_id)
     {
-        $class = Classes::where('tuition_id', $tuition_id)->get();
+        $class = Classes::where('tuition_id', $tuition_id)
+            ->withCount('students') // students relation count
+            ->get();
 
         return [
             'status' => 'success',
