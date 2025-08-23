@@ -40,7 +40,7 @@ class PaymentController extends Controller
 
         // Save order in DB with tuition_id
         RenewTransaction::create([
-            'tuition_id' => $request->user()->id, // logged-in tuition user
+            'tuition_id' => $user->id, // logged-in tuition user
             'razorpay_order_id'   => $order['id'],
             'amount'     => $amountPaise,
             'status'     => 'created',
@@ -61,6 +61,7 @@ class PaymentController extends Controller
     // Verify Razorpay Payment
     public function verifyPayment(VerifyPaymentRequest $request)
     {
+        $user = $request->user();
         $api = new \Razorpay\Api\Api(
             config('services.razorpay.key'),
             config('services.razorpay.secret')
@@ -86,12 +87,12 @@ class PaymentController extends Controller
 
             if ($ordersfetch) {                
                 // **Calculate new expiry date**
-                $tuitionExpiry = Carbon::parse($request->user()->expiry_datetime);
+                $tuitionExpiry = Carbon::parse($user->expiry_datetime);
                 $baseDate = $tuitionExpiry->isPast() ? now() : $tuitionExpiry;
                 $futureDate = $baseDate->addMonths((int)$ordersfetch->months);
 
                 RenewTransaction::where('razorpay_order_id', $payment->order_id)
-                    ->where('tuition_id', $request->user()->id)
+                    ->where('tuition_id', $user->id)
                     ->update([
                         'status' => $payment->status,
                         'razorpay_payment_id' => $payment->id,
@@ -99,7 +100,7 @@ class PaymentController extends Controller
                         'razorpay_signature' => $request->razorpay_signature,
                         'json_response' => json_encode((array)$payment),
                     ]);
-                User::find($request->user()->id)->update([
+                User::find($user->id)->update([
                     'expiry_datetime' => $futureDate
                 ]);
 

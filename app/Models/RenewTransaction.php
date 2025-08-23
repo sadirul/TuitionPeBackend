@@ -10,7 +10,7 @@ class RenewTransaction extends Model
         'tuition_id',
         'months',
         'amount',
-        'descrription',
+        'description',
         'status',
         'currency',
         'receipt',
