@@ -35,6 +35,9 @@ Route::group(['middleware' => ['api', JwtMiddleware::class,]], function ($router
     Route::middleware([RoleStatusExpiryMiddleware::class .  ':tuition'])->group(function () {
         // DASHBOARD DATA
         Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dasshboard');
+
+        // GENERATE FEES
+        Route::get('/generate-fees', [FeeController::class, 'generateFess'])->name('generateFess');
         // CLASSES ROUTE
         Route::post('/class/store', [ClassController::class, 'store'])->name('class.store');
         Route::get('/class/index', [ClassController::class, 'index'])->name('class.index');

@@ -21,7 +21,7 @@ class GenerateMonthlyFees extends Command
      *
      * @var string
      */
-    protected $description = 'Generate monthly fees automatically for all students';
+    protected $description = 'Generate monthly fees automatically for all active students';
 
     /**
      * Execute the console command.
@@ -32,33 +32,40 @@ class GenerateMonthlyFees extends Command
 
         try {
             $yearMonth  = now()->subMonth()->format('F Y');
-            $students = Student::all();
+
+            // Get only students with active user
+            $students = Student::whereHas('user', function ($q) {
+                $q->where('status', 'active');
+            })
+                ->with('user')
+                ->get();
+
+            $createdCount = 0;
 
             foreach ($students as $student) {
-                if ($student->status == 'active') {
-                    // Check already exists
-                    $exists = Fee::where('student_id', $student->id)
-                        ->where('year_month', $yearMonth)
-                        ->exists();
+                // Check if fee already exists
+                $exists = Fee::where('student_id', $student->id)
+                    ->where('year_month', $yearMonth)
+                    ->exists();
 
-                    if (!$exists) {
-                        Fee::create([
-                            'tuition_id'   => $student->tuition_id,
-                            'student_id'   => $student->id,
-                            'monthly_fees' => $student->monthly_fees ?? 0,
-                            'year_month'   => $yearMonth,
-                            'is_paid'      => false,
-                        ]);
-                    }
+                if (!$exists) {
+                    Fee::create([
+                        'tuition_id'   => $student->tuition_id,
+                        'student_id'   => $student->id,
+                        'monthly_fees' => $student->monthly_fees ?? 0,
+                        'year_month'   => $yearMonth,
+                        'is_paid'      => false,
+                    ]);
+                    $createdCount++;
                 }
             }
 
             DB::commit();
 
-            $this->info("Monthly fees generated for {$yearMonth}");
+            $this->info("✅ Fees generated successfully for {$createdCount} students ({$yearMonth})");
         } catch (\Exception $e) {
             DB::rollBack();
-            $this->error("Error: " . $e->getMessage());
+            $this->error("❌ Error generating fees: " . $e->getMessage());
         }
     }
 }

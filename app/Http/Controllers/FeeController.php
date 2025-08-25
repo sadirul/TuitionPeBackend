@@ -21,4 +21,9 @@ class FeeController extends Controller
     {
         return $this->feeService->update($this->request->user()->id, $request->validated());
     }
+
+    public function generateFess()
+    {
+        return $this->feeService->generateFess($this->request->user()->id);
+    }
 }
