@@ -8,8 +8,10 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
-Schedule::command('fees:generate')
-    ->monthlyOn(1, '00:01');
+$feesGenarate = Schedule::command('fees:generate');
+if(env('APP_ENV') != 'local'){
+    $feesGenarate->monthlyOn(1, '00:01');
+}
 
 
 // * * * * * cd /path/to/your/project && php artisan schedule:run >> /dev/null 2>&1

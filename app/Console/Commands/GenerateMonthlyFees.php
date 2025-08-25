@@ -31,24 +31,25 @@ class GenerateMonthlyFees extends Command
         DB::beginTransaction();
 
         try {
-            $yearMonth = now()->format('F Y'); 
-
+            $yearMonth  = now()->subMonth()->format('F Y');
             $students = Student::all();
 
             foreach ($students as $student) {
-                // Check already exists
-                $exists = Fee::where('student_id', $student->id)
-                    ->where('year_month', $yearMonth)
-                    ->exists();
+                if ($student->status == 'active') {
+                    // Check already exists
+                    $exists = Fee::where('student_id', $student->id)
+                        ->where('year_month', $yearMonth)
+                        ->exists();
 
-                if (!$exists) {
-                    Fee::create([
-                        'tuition_id'   => $student->tuition_id,
-                        'student_id'   => $student->id,
-                        'monthly_fees' => $student->monthly_fees ?? 0,
-                        'year_month'   => $yearMonth,
-                        'is_paid'      => false,
-                    ]);
+                    if (!$exists) {
+                        Fee::create([
+                            'tuition_id'   => $student->tuition_id,
+                            'student_id'   => $student->id,
+                            'monthly_fees' => $student->monthly_fees ?? 0,
+                            'year_month'   => $yearMonth,
+                            'is_paid'      => false,
+                        ]);
+                    }
                 }
             }
 

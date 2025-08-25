@@ -45,6 +45,7 @@ Route::group(['middleware' => ['api', JwtMiddleware::class,]], function ($router
         Route::get('/student/index/{student_uuid?}', [StudentController::class, 'index'])->name('student.index');
         Route::put('/student/update/{student_id}', [StudentController::class, 'update'])->name('student.update');
         Route::put('/student/change/class', [StudentController::class, 'changeClass'])->name('student.change.class');
+        Route::put('/student/change/status', [StudentController::class, 'changeStatus'])->name('student.change.status');
 
         // FEES PAID
         Route::put('/fee/update/{fee_uuid}', [FeeController::class, 'update'])->name('fee.update');

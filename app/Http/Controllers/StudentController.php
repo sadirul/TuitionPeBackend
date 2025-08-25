@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\BulkUpdateStudentClassRequest;
+use App\Http\Requests\BulkUpdateStudentStatusRequest;
 use App\Http\Requests\StoreStudentRequest;
 use App\Http\Requests\UpdateClassRequest;
 use App\Http\Requests\UpdateStudentRequest;
@@ -38,5 +39,10 @@ class StudentController extends Controller
     public function changeClass(BulkUpdateStudentClassRequest $request)
     {
         return $this->studentService->changeClass($this->request->user()->id, $request->validated());
+    }
+
+    public function changeStatus(BulkUpdateStudentStatusRequest $request)
+    {
+        return $this->studentService->changeStatus($this->request->user()->id, $request->validated());
     }
 }

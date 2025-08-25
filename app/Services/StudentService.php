@@ -164,7 +164,7 @@ class StudentService
                 'msg'    => 'Student updated successfully',
                 'data'   => $user->fresh([
                     'studentInfo.class',
-                    'studentInfo.fees' 
+                    'studentInfo.fees'
                 ])
             ];
         } catch (Exception $e) {
@@ -196,6 +196,28 @@ class StudentService
             return [
                 'status'  => 'success',
                 'msg' => $updated . ' students updated successfully',
+            ];
+        });
+    }
+
+    public function changeStatus(int $tuition_id, array $data)
+    {
+        return DB::transaction(function () use ($tuition_id, $data) {
+
+            // Update users linked with students in this tuition
+            $updated = User::whereIn('id', function ($query) use ($data, $tuition_id) {
+                $query->select('user_id')
+                    ->from('students')
+                    ->whereIn('uuid', $data['student_ids'])
+                    ->where('tuition_id', $tuition_id);
+            })
+                ->update([
+                    'status' => $data['status'],
+                ]);
+
+            return [
+                'status' => 'success',
+                'msg'    => $updated . ' students ' . ($data['status'] === 'active' ? 'activated' : 'deactivated') . ' successfully',
             ];
         });
     }
