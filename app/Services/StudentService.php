@@ -21,12 +21,14 @@ class StudentService
                 'username' => Str::of($data['name'])
                     ->lower()
                     ->replace(' ', '.')
-                    ->replaceMatches('/\.+/', '.'),
+                    ->replaceMatches('/\.+/', '.')
+                    ->append('.' . Str::random(20)),
+
                 'mobile'   => $data['mobile'],
                 'address'  => $data['address'],
                 'role'     => 'student',
                 'email'    => $data['email'] ?? null,
-                'password' => $data['password'],
+                'password' => Str::random(20),
             ]);
 
             $user->update([

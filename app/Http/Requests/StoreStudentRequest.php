@@ -45,8 +45,8 @@ class StoreStudentRequest extends FormRequest
             'guardianName' => 'required|string|max:255',
             'guardianMobile' => 'required|digits:10',
             'monthlyFees' => 'required|numeric|min:0',
-            'password' => 'required|string|min:6',
-            'confirm_password' => 'required|string|min:6|same:password',
+            // 'password' => 'required|string|min:6',
+            // 'confirm_password' => 'required|string|min:6|same:password',
         ];
     }
 }
