@@ -24,14 +24,21 @@ class ClassService
 
     public function index(int $tuition_id)
     {
-        $class = Classes::where('tuition_id', $tuition_id)
-            ->withCount('students') // students relation count
+        $classes = Classes::where('tuition_id', $tuition_id)
+            ->withCount([
+                'students as students_count' => function ($query) {
+                    $query->whereHas('user', function ($q) {
+                        $q->where('status', 'active');
+                    });
+                }
+            ])
             ->get();
+
 
         return [
             'status' => 'success',
             'msg' => 'Class fetched successfully',
-            'data' => $class
+            'data' => $classes
         ];
     }
 
