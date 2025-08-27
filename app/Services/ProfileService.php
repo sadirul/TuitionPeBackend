@@ -17,14 +17,20 @@ class ProfileService
         return DB::transaction(function () use ($userId, $data) {
             $user = User::findOrFail($userId);
 
-            $user->update([
-                'tuition_name'    => $data['tuition_name'] ?? $user->tuition_name,
-                'name'    => $data['name'] ?? $user->name,
-                'mobile'  => $data['mobile'] ?? $user->mobile,
-                'address' => $data['address'] ?? $user->address,
-                'email'   => $data['email'] ?? $user->email,
-                'upi_id'   => empty($data['upi_id']) ? null : $data['upi_id'],
-            ]);
+            $updateData = [
+                'tuition_name' => $data['tuition_name'] ?? $user->tuition_name,
+                'name'         => $data['name'] ?? $user->name,
+                'mobile'       => $data['mobile'] ?? $user->mobile,
+                'address'      => $data['address'] ?? $user->address,
+                'email'        => $data['email'] ?? $user->email,
+            ];
+
+            // Only for upi_id
+            if (array_key_exists('upi_id', $data)) {
+                $updateData['upi_id'] = !empty($data['upi_id']) ? $data['upi_id'] : null;
+            }
+
+            $user->update($updateData);
 
             return [
                 'status'  => 'success',
