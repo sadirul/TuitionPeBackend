@@ -23,7 +23,7 @@ class ProfileService
                 'mobile'  => $data['mobile'] ?? $user->mobile,
                 'address' => $data['address'] ?? $user->address,
                 'email'   => $data['email'] ?? $user->email,
-                'upi_id'   => $data['upi_id'] ?? null,
+                'upi_id'   => empty($data['upi_id']) ? null : $data['upi_id'],
             ]);
 
             return [

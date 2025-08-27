@@ -6,6 +6,7 @@ use App\Models\Classes;
 use App\Models\Student;
 use App\Models\User;
 use Exception;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -49,7 +50,8 @@ class StudentService
             ]);
 
             DB::commit();
-
+            $cacheKey = "dashboard_stats_{$id}";
+            Cache::forget($cacheKey);
             return [
                 'status' => 'success',
                 'msg'    => 'Student added successfully',
@@ -216,7 +218,7 @@ class StudentService
                 ->update([
                     'status' => $data['status'],
                 ]);
-
+            Cache::forget("dashboard_stats_{$tuition_id}");
             return [
                 'status' => 'success',
                 'msg'    => $updated . ' students ' . ($data['status'] === 'active' ? 'activated' : 'deactivated') . ' successfully',

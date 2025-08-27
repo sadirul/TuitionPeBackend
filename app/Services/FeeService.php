@@ -6,6 +6,7 @@ use App\Http\Requests\FeeRequest;
 use App\Models\Fee;
 use App\Models\Student;
 use Exception;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class FeeService
@@ -22,7 +23,7 @@ class FeeService
             ]);
 
             DB::commit();
-
+            Cache::forget("dashboard_stats_{$tuition_id}");
             return [
                 'status' => 'success',
                 'msg'    => 'Fee updated successfully',
@@ -73,7 +74,7 @@ class FeeService
             }
 
             DB::commit();
-
+            Cache::forget("dashboard_stats_{$tuition_id}");
             return response()->json([
                 'status' => 'success',
                 'msg'    => "Fees generated successfully",

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Classes;
 use App\Models\User;
+use Illuminate\Support\Facades\Cache;
 
 class ClassService
 {
@@ -14,6 +15,8 @@ class ClassService
             'class_name' => $data['class_name'],
             'section' => $data['section'] ?? null,
         ]);
+        $cacheKey = "dashboard_stats_{$id}";
+        Cache::forget($cacheKey);
 
         return [
             'status' => 'success',
