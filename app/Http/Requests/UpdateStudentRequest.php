@@ -56,7 +56,7 @@ class UpdateStudentRequest extends FormRequest
                     $query->where('tuition_id', $this->user()->id);
                 }),
             ],
-            'gender' => 'sometimes|required|in:male,female,others',
+            'gender' => 'sometimes|required|in:male,female,other',
             'mobile' => [
                 'sometimes',
                 'required',
