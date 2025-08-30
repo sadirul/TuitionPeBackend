@@ -39,7 +39,7 @@ class StoreStudentRequest extends FormRequest
                     $query->where('tuition_id', $this->user()->id);
                 }),
             ],
-            'gender' => 'required|in:male,female,others',
+            'gender' => 'required|in:male,female,other',
             'mobile' => 'required|digits:10',
             'address' => 'required|string|max:255',
             'guardianName' => 'required|string|max:255',
