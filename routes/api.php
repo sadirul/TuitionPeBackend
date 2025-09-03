@@ -27,6 +27,9 @@ Route::post('/login',    [AuthController::class, 'login'])->name('login');
 Route::post('/password/forgot', [ForgotPasswordController::class, 'sendResetLinkEmail']);
 Route::post('/password/reset', [ResetPasswordController::class, 'reset'])->name('password.reset');
 
+// GET PRICING PLANS
+Route::get('/plans', [PlanController::class, 'index'])->name('plans.index');
+
 
 Route::group(['middleware' => ['api', JwtMiddleware::class,]], function ($router) {
     // LOGOUT
@@ -65,5 +68,5 @@ Route::group(['middleware' => ['api', JwtMiddleware::class,]], function ($router
     Route::post('/payment/verify', [PaymentController::class, 'verifyPayment'])->name('verifyPayment');
 
     // PLANS
-    Route::get('/plans', [PlanController::class, 'index'])->name('plans.index');
 });
+
