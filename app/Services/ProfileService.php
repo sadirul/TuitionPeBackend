@@ -74,7 +74,7 @@ class ProfileService
             if (!Hash::check($data['password'], $user->password)) {
                 return [
                     'status'  => 'error',
-                    'msg' => 'Current password is incorrect',
+                    'msg' => 'Incorrect password!',
                 ];
             }
 
