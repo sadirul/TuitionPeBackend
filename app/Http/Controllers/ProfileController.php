@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ChangePasswordRequest;
+use App\Http\Requests\DeleteAccountRequest;
 use App\Http\Requests\UpdateProfileRequest;
 use App\Services\ProfileService;
 use Illuminate\Http\Request;
@@ -27,5 +28,10 @@ class ProfileController extends Controller
     public function changePassword(ChangePasswordRequest $request)
     {
         return $this->profileService->changePassword($this->request->user()->id, $request->validated());
+    }
+
+    public function deleteAccount(DeleteAccountRequest $request)
+    {
+        return $this->profileService->deleteAccount($this->request->user()->id, $request->validated());
     }
 }

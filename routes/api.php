@@ -55,6 +55,9 @@ Route::group(['middleware' => ['api', JwtMiddleware::class,]], function ($router
 
         // FEES PAID
         Route::put('/fee/update/{fee_uuid}', [FeeController::class, 'update'])->name('fee.update');
+
+        // DELETE ACCOUNT
+        Route::post('/account/delete', [ProfileController::class, 'deleteAccount'])->name('account.delete');
     });
 
     // PROFILE UPDATE
@@ -66,7 +69,4 @@ Route::group(['middleware' => ['api', JwtMiddleware::class,]], function ($router
     //RAZORPAY API
     Route::post('/payment/order', [PaymentController::class, 'createOrder'])->name('createOrder');
     Route::post('/payment/verify', [PaymentController::class, 'verifyPayment'])->name('verifyPayment');
-
-    // PLANS
 });
-

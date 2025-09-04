@@ -64,4 +64,29 @@ class ProfileService
             ];
         });
     }
+
+    public function deleteAccount(int $userId, array $data): array
+    {
+        return DB::transaction(function () use ($userId, $data) {
+            $user = User::findOrFail($userId);
+
+            // verify old password
+            if (!Hash::check($data['password'], $user->password)) {
+                return [
+                    'status'  => 'error',
+                    'msg' => 'Current password is incorrect',
+                ];
+            }
+
+            // update new password
+            $user->update([
+                'status' => 'inactive',
+            ]);
+
+            return [
+                'status'  => 'success',
+                'msg' => 'Your account has been deeleted successfully',
+            ];
+        });
+    }
 }
