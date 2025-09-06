@@ -101,6 +101,7 @@ class FeeService
         try {
             $student = User::where('uuid', $data['student_id'])
                 ->where('tuition_id', $tuition_id)
+                ->where('status', 'active')
                 ->with('studentInfo')
                 ->select('id')
                 ->first();
