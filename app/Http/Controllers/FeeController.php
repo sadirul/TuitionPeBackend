@@ -25,7 +25,7 @@ class FeeController extends Controller
 
     public function generateFess()
     {
-        return $this->feeService->generateFess($this->request->user()->id);
+        return $this->feeService->generateFess($this->request->user()->id, $this->request->all());
     }
 
     public function addFees(AddStudentFeesRequest $request)

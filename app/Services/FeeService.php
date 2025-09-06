@@ -41,18 +41,25 @@ class FeeService
         }
     }
 
-    public function generateFess(int $tuition_id)
+    public function generateFess(int $tuition_id, array $data)
     {
         DB::beginTransaction();
 
         try {
             $yearMonth  = now()->subMonth()->format('F Y');
+
             $students = Student::where('tuition_id', $tuition_id)
                 ->whereHas('user', function ($q) {
                     $q->where('status', 'active'); // only active users
-                })
-                ->with('user')
-                ->get();
+                });
+
+            // যদি exceptThisMonth = "true" আসে
+            if (!empty($data['exceptThisMonth']) && $data['exceptThisMonth'] == 'true') {
+                $students->whereMonth('created_at', '!=', now()->month)
+                    ->whereYear('created_at', now()->year);
+            }
+
+            $students = $students->with('user')->get();
 
             $createdCount = 0;
 
@@ -95,6 +102,7 @@ class FeeService
             ], 500);
         }
     }
+
 
     public function addFees(int $tuition_id, array $data)
     {
