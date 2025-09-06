@@ -80,7 +80,7 @@ class ProfileService
 
             // update new password
             $user->update([
-                'status' => 'inactive',
+                'status' => 'deleted',
             ]);
 
             return [

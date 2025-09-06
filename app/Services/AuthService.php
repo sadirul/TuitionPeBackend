@@ -44,9 +44,18 @@ class AuthService
         }
 
         $user = Auth::guard('api')->user()->load(['studentInfo',]);
-        if ($user->status !== 'active') {
-            return response()->json(['status' => 'error', 'msg' => 'Your account has been deleted!'], 401);
+        $messages = [
+            'inactive' => 'Your account is inactive. Please contact support.',
+            'deleted'  => 'Your account has been deleted!',
+        ];
+
+        if (isset($messages[$user->status])) {
+            return response()->json([
+                'status' => 'error',
+                'msg'    => $messages[$user->status],
+            ], 401);
         }
+
 
         $expirationDate = Carbon::parse($user->tuition->expiry_datetime);
         if ($user->role === 'student' && $expirationDate->isPast()) {

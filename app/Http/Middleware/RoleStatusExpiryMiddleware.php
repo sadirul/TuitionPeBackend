@@ -26,15 +26,28 @@ class RoleStatusExpiryMiddleware
         }
 
         if ($user->status !== 'active') {
+            $messages = [
+                'inactive' => 'Your account is inactive. Please contact support.',
+                'deleted'  => 'Your account has been deleted!',
+            ];
+
+            $msg = $messages[$user->status] ?? 'Your account is not active!';
+
             try {
                 JWTAuth::invalidate(JWTAuth::getToken());
-                return response()->json(['status' => 'error', 'msg' => 'Your account has been deleted!'], 401);
+                return response()->json([
+                    'status' => 'error',
+                    'msg'    => $msg,
+                ], 401);
             } catch (JWTException $e) {
-                return response()->json(['error' => 'Something wrong, please try again'], 401);
+                return response()->json([
+                    'status' => 'error',
+                    'msg'    => 'Something went wrong, please try again',
+                ], 401);
             }
-            return response()->json(['status' => 'error', 'msg' => 'Your account has been deleted!'], 401);
         }
-        
+
+
         if (!in_array($user->role, $roles)) {
             return response()->json([
                 'status' => 'error',
