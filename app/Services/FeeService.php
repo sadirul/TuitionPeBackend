@@ -53,7 +53,6 @@ class FeeService
                     $q->where('status', 'active'); // only active users
                 });
 
-            // যদি exceptThisMonth = "true" আসে
             if (!empty($data['exceptThisMonth']) && $data['exceptThisMonth'] == 'true') {
                 $students->whereMonth('created_at', '!=', now()->month)
                     ->whereYear('created_at', now()->year);
@@ -146,7 +145,7 @@ class FeeService
             return response()->json([
                 'status' => 'success',
                 'msg'    => 'Fee added successfully',
-                'data'   => $fee,
+                'data'   => $fee->fresh(),
             ], 201);
         } catch (\Exception $e) {
             return response()->json([
