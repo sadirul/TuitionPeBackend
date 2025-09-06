@@ -11,6 +11,7 @@ class Classes extends Model
         'tuition_id',
         'class_name',
         'section',
+        'fee',
     ];
 
     public function tuition()

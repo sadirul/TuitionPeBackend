@@ -190,12 +190,18 @@ class StudentService
                 ->where('tuition_id', $tuition_id)
                 ->firstOrFail();
 
-            // Bulk update students
+            $updateData = [
+                'class_id' => $class->id,
+            ];
+
+            if (!empty($class->fee) && isset($data['updateFees']) && $data['updateFees'] == 'true') {
+                $updateData['monthly_fees'] = $class->fee;
+            }
+
             $updated = Student::whereIn('uuid', $data['student_ids'])
                 ->where('tuition_id', $tuition_id)
-                ->update([
-                    'class_id' => $class->id,
-                ]);
+                ->update($updateData);
+
 
             return [
                 'status'  => 'success',

@@ -31,6 +31,7 @@ class BulkUpdateStudentClassRequest extends FormRequest
      */
     public function rules(): array
     {
+        $this->merge(['updateFees' => $this->updateFees ?? false]);
         return [
             'class' => [
                 'required',
@@ -45,6 +46,7 @@ class BulkUpdateStudentClassRequest extends FormRequest
                     $query->where('tuition_id', $this->user()->id);
                 }),
             ],
+            'updateFees'    => ['sometimes'],
         ];
     }
 

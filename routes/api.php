@@ -46,7 +46,7 @@ Route::group(['middleware' => ['api', JwtMiddleware::class,]], function ($router
         // CLASSES ROUTE
         Route::post('/class/store', [ClassController::class, 'store'])->name('class.store');
         Route::get('/class/index', [ClassController::class, 'index'])->name('class.index');
-        Route::get('/class/update/{uuid}', [ClassController::class, 'update'])->name('class.update');
+        Route::put('/class/edit/{uuid}', [ClassController::class, 'update'])->name('class.update');
 
         // CLASSES ROUTE
         Route::post('/student/store', [StudentController::class, 'store'])->name('student.store');

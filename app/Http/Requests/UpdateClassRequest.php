@@ -53,6 +53,7 @@ class UpdateClassRequest extends FormRequest
                 })->ignore($this->route('uuid'), 'uuid'), // Ignore current record by UUID
             ],
             'section' => ['nullable', 'string', 'max:255'],
+            'fee' => ['required', 'numeric', 'min:1'],
         ];
     }
 

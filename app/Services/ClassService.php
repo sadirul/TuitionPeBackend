@@ -14,6 +14,7 @@ class ClassService
             'tuition_id' => $id,
             'class_name' => $data['class_name'],
             'section' => $data['section'] ?? null,
+            'fee' => $data['fee'] ?? null,
         ]);
         $cacheKey = "dashboard_stats_{$id}";
         Cache::forget($cacheKey);
@@ -64,12 +65,13 @@ class ClassService
         $class->update([
             'class_name' => $data['class_name'],
             'section'    => $data['section'] ?? null,
+            'fee'    => $data['fee'] ?? $class->fee,
         ]);
 
         return [
             'status' => 'success',
             'msg' => 'Class updated successfully',
-            'data' => $class
+            'data' => $class->fresh()
         ];
     }
 }

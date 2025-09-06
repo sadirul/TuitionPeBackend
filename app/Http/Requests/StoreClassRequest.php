@@ -48,6 +48,7 @@ class StoreClassRequest extends FormRequest
                 }),
             ],
             'section' => ['nullable', 'string', 'max:255'],
+            'fee' => ['required', 'numeric', 'min:1'],
         ];
     }
 
