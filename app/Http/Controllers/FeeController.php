@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AddStudentFeesRequest;
 use App\Http\Requests\FeeUpdateRequest;
 use App\Services\FeeService;
 use Illuminate\Http\Request;
@@ -25,5 +26,10 @@ class FeeController extends Controller
     public function generateFess()
     {
         return $this->feeService->generateFess($this->request->user()->id);
+    }
+
+    public function addFees(AddStudentFeesRequest $request)
+    {
+        return $this->feeService->addFees($this->request->user()->id, $request->validated());
     }
 }

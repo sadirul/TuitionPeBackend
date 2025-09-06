@@ -41,6 +41,8 @@ Route::group(['middleware' => ['api', JwtMiddleware::class,]], function ($router
 
         // GENERATE FEES
         Route::get('/generate-fees', [FeeController::class, 'generateFess'])->name('generateFess');
+        Route::post('/add-fees/{student_id}', [FeeController::class, 'addFees'])->name('addFees');
+
         // CLASSES ROUTE
         Route::post('/class/store', [ClassController::class, 'store'])->name('class.store');
         Route::get('/class/index', [ClassController::class, 'index'])->name('class.index');
@@ -52,6 +54,7 @@ Route::group(['middleware' => ['api', JwtMiddleware::class,]], function ($router
         Route::put('/student/update/{student_id}', [StudentController::class, 'update'])->name('student.update');
         Route::put('/student/change/class', [StudentController::class, 'changeClass'])->name('student.change.class');
         Route::put('/student/change/status', [StudentController::class, 'changeStatus'])->name('student.change.status');
+        Route::put('/student/fees/add', [StudentController::class, 'addFees'])->name('student.fees.add');
 
         // FEES PAID
         Route::put('/fee/update/{fee_uuid}', [FeeController::class, 'update'])->name('fee.update');

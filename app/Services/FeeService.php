@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Http\Requests\FeeRequest;
 use App\Models\Fee;
 use App\Models\Student;
+use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -91,6 +92,58 @@ class FeeService
                 'status' => 'error',
                 'msg'    => 'Something went wrong while generating fees',
                 'error'  => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function addFees(int $tuition_id, array $data)
+    {
+        try {
+            $student = User::where('uuid', $data['student_id'])
+                ->where('tuition_id', $tuition_id)
+                ->with('studentInfo')
+                ->select('id')
+                ->first();
+
+            if (!$student || !$student->studentInfo) {
+                return response()->json([
+                    'status' => 'error',
+                    'msg'    => 'Student not found',
+                    'data'   => null,
+                ], 404);
+            }
+
+            $exists = Fee::where('tuition_id', $tuition_id)
+                ->where('student_id', $student->studentInfo->id)
+                ->where('year_month', $data['year_month'])
+                ->exists();
+
+            if ($exists) {
+                return response()->json([
+                    'status' => 'error',
+                    'msg'    => 'Fee already exists for ' . $data['year_month'],
+                    'data'   => null,
+                ], 409);
+            }
+
+            $fee = Fee::create([
+                'tuition_id'   => $tuition_id,
+                'student_id'   => $student->studentInfo->id,
+                'monthly_fees' => $student->studentInfo->monthly_fees ?? 0,
+                'year_month'   => $data['year_month'],
+                'is_paid'      => $data['is_paid'],
+            ]);
+
+            return response()->json([
+                'status' => 'success',
+                'msg'    => 'Fee added successfully',
+                'data'   => $fee,
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'msg'    => $e->getMessage(),
+                'data'   => null,
             ], 500);
         }
     }
