@@ -129,7 +129,7 @@ class FeeService
             if ($exists) {
                 return response()->json([
                     'status' => 'error',
-                    'msg'    => 'Fee already exists for ' . $data['year_month'],
+                    'msg' => 'The fee for ' . $data['year_month'] . ' has already been added.',
                     'data'   => null,
                 ], 409);
             }
