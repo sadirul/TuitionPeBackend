@@ -39,6 +39,9 @@ Route::group(['middleware' => ['api', JwtMiddleware::class,]], function ($router
         // DASHBOARD DATA
         Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dasshboard');
 
+        // MONTHLY DASHBOARD DATA
+        Route::get('/dashboard/monthly-collection', [DashboardController::class, 'monthlyCollection'])->name('dasshboard.monthlyCollection');
+
         // GENERATE FEES
         Route::get('/generate-fees', [FeeController::class, 'generateFess'])->name('generateFess');
         Route::post('/add-fees/{student_id}', [FeeController::class, 'addFees'])->name('addFees');
