@@ -142,6 +142,8 @@ class FeeService
                 'is_paid'      => $data['is_paid'],
             ]);
 
+            Cache::forget("dashboard_stats_{$tuition_id}");
+
             return response()->json([
                 'status' => 'success',
                 'msg'    => 'Fee added successfully',
