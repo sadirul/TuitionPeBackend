@@ -162,6 +162,7 @@ class StudentService
             ]);
 
             DB::commit();
+            Cache::forget("classes_tuition_{$tuition_id}");
 
             return [
                 'status' => 'success',
@@ -201,6 +202,7 @@ class StudentService
             $updated = Student::whereIn('uuid', $data['student_ids'])
                 ->where('tuition_id', $tuition_id)
                 ->update($updateData);
+            Cache::forget("classes_tuition_{$tuition_id}");
 
 
             return [
