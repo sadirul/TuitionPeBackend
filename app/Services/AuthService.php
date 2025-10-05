@@ -22,7 +22,7 @@ class AuthService
             'address'      => $data['address'],
             'role'         => 'tuition',
             'email'        => $data['email'],
-            'expiry_datetime' => now()->addDays(3),
+            'expiry_datetime' => now()->addDays(90),
             'password'     => $data['password'],
         ]);
         $user->update([
