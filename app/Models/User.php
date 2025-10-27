@@ -46,6 +46,9 @@ class User extends Authenticatable implements JWTSubject
         'expiry_datetime',
         'upi_id',
         'status',
+        'is_verified',
+        'otp',
+        'otp_expires_at',
     ];
 
     /**

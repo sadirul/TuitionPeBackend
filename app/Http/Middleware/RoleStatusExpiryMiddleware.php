@@ -25,6 +25,10 @@ class RoleStatusExpiryMiddleware
             return response()->json(['status' => 'error', 'msg' => 'Your plan has been expired!'], 401);
         }
 
+        if (!$user->is_verified) {
+            return response()->json(['status' => 'error', 'msg' => 'Your account is not verified!'], 403);
+        }
+
         if ($user->status !== 'active') {
             $messages = [
                 'inactive' => 'Your account is inactive. Please contact support.',

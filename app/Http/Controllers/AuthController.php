@@ -21,6 +21,16 @@ class AuthController extends Controller
         return $this->authService->register($request->validated());
     }
 
+    public function verifyOtp(Request $request)
+    {
+        return $this->authService->verifyOtp($request);
+    }
+
+    public function resendOtp(Request $request)
+    {
+        return $this->authService->resendOtp($request);
+    }
+
     public function login(LoginRequest $request)
     {
         return $this->authService->login($request);

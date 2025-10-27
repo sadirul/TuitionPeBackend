@@ -26,7 +26,7 @@ class JwtMiddleware
             // Set the authenticated user on the request
             $request->attributes->set('user', $user);
         } catch (TokenExpiredException $e) {
-            return response()->json(['status' => 'error', 'msg' => 'Token has expired!'], 401);
+            return response()->json(['status' => 'error', 'msg' => 'Session has expired!'], 401);
         } catch (TokenInvalidException $e) {
             return response()->json(['status' => 'error', 'msg' => 'Invalid token provided!'], 401);
         } catch (JWTException $e) {
