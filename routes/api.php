@@ -27,8 +27,8 @@ Route::post('/resend-otp', [AuthController::class, 'resendOtp'])
 Route::post('/login', [AuthController::class, 'login'])->name('login')->middleware(['throttle:5,1',]);
 
 // PASSWORD RESET
-Route::post('/password/forgot', [ForgotPasswordController::class, 'sendResetLinkEmail']);
-Route::post('/password/reset', [ResetPasswordController::class, 'reset'])->name('password.reset');
+Route::post('/password/forgot', [ForgotPasswordController::class, 'sendResetLinkEmail'])->middleware(['throttle:5,1',]);
+Route::post('/password/reset', [ResetPasswordController::class, 'reset'])->name('password.reset')->middleware(['throttle:5,1',]);
 
 // GET PRICING PLANS
 Route::get('/plans', [PlanController::class, 'index'])->name('plans.index');

@@ -5,10 +5,11 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Validation\Rule;
 
 class ForgotPasswordRequest extends FormRequest
 {
-    public function failedValidation(Validator $validator)
+    protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(
             response()->json([
@@ -18,23 +19,50 @@ class ForgotPasswordRequest extends FormRequest
             ], 400)
         );
     }
-    /**
-     * Determine if the user is authorized to make this request.
-     */
+
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
+        $provider = $this->input('provider');
+
+        // ✅ Check if provider is email
+        if (filter_var($provider, FILTER_VALIDATE_EMAIL)) {
+            return [
+                'provider' => [
+                    'required',
+                    'email',
+                    Rule::exists('users', 'email')->where(function ($query) {
+                        $query->where('is_verified', true)
+                            ->where('status', 'active');
+                    }),
+                ],
+            ];
+        }
+
+        // ✅ Else assume it's mobile
         return [
-            'email' => 'required|email|exists:users,email'
+            'provider' => [
+                'required',
+                'digits:10',
+                Rule::exists('users', 'mobile')->where(function ($query) {
+                    $query->where('is_verified', true)
+                        ->where('status', 'active');
+                }),
+            ],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'provider.required' => 'Email or mobile is required.',
+            'provider.email'    => 'Enter a valid email address.',
+            'provider.exists'   => 'No verified and active account found with this email or mobile number.',
+            'provider.digits'   => 'Mobile number must be 10 digits.',
         ];
     }
 }
