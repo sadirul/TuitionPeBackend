@@ -21,7 +21,7 @@ Route::get('/user', function (Request $request) {
 
 
 Route::post('/register', [AuthController::class, 'register'])->name('register');
-Route::post('/verify-otp', [AuthController::class, 'verifyOtp'])->name('verifyOtp');
+Route::post('/verify-otp', [AuthController::class, 'verifyOtp'])->name('verifyOtp')->middleware(['throttle:3,2',]);
 Route::post('/resend-otp', [AuthController::class, 'resendOtp'])
     ->middleware(['throttle:3,1',]); // 3 attempts per minute
 Route::post('/login', [AuthController::class, 'login'])->name('login')->middleware(['throttle:5,1',]);
