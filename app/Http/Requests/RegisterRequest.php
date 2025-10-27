@@ -61,24 +61,37 @@ class RegisterRequest extends FormRequest
         $ignoreUnverified = $existingUser && !$existingUser->is_verified;
 
         return [
-            'tuition_name' => 'required|string|max:255',
-            'name' => 'required|string|max:255',
+            'tuition_name' => [
+                'required',
+                'string',
+                'max:255',
+                'regex:/^[A-Za-z\s]+$/', // Only letters and spaces
+            ],
+
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                'regex:/^[A-Za-z\s]+$/', // Only letters and spaces
+            ],
 
             'username' => [
                 'required',
                 'string',
                 'max:255',
+                'regex:/^[a-z0-9.]+$/', // lowercase letters, numbers, dot only
                 $ignoreUnverified
                     ? Rule::unique('users', 'username')->ignore($existingUser->id)
-                    : Rule::unique('users', 'username')
+                    : Rule::unique('users', 'username'),
             ],
 
             'mobile' => [
                 'required',
                 'digits:10',
+                'regex:/^[0-9]{10}$/', // exactly 10 digits
                 $ignoreUnverified
                     ? Rule::unique('users', 'mobile')->ignore($existingUser->id)
-                    : Rule::unique('users', 'mobile')
+                    : Rule::unique('users', 'mobile'),
             ],
 
             'address' => 'required|string|max:255',
@@ -90,7 +103,7 @@ class RegisterRequest extends FormRequest
                 'max:255',
                 $ignoreUnverified
                     ? Rule::unique('users', 'email')->ignore($existingUser->id)
-                    : Rule::unique('users', 'email')
+                    : Rule::unique('users', 'email'),
             ],
 
             'password' => 'required|string|min:6',

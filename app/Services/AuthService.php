@@ -55,13 +55,11 @@ class AuthService
         $smsResponse = SmsHelper::sendSms(
             $user->mobile,
             '201012',
-            $otp
         );
 
         return response()->json([
             'status' => 'success',
             'msg' => 'OTP sent successfully',
-            'otp' => $otp, // remove this line in production
         ]);
     }
 
