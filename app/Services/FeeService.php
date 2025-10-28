@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Http\Requests\FeeRequest;
+use App\Jobs\SmsJob;
 use App\Models\Fee;
 use App\Models\Student;
 use App\Models\User;
@@ -17,12 +18,27 @@ class FeeService
         DB::beginTransaction();
 
         try {
-            $fee = Fee::where('uuid', $data['fee_uuid'])->where('tuition_id', $tuition_id)->firstOrFail();
-
+            $fee = Fee::where('uuid', $data['fee_uuid'])->where('tuition_id', $tuition_id)->with('student.user:id,name')->with('tuition:id,tuition_name')->firstOrFail();
+            if ($fee->is_paid) {
+                return [
+                    'status' => 'error',
+                    'msg'    => 'Fee is already marked as paid!',
+                ];
+            }
             $fee->update([
                 'is_paid' => $data['is_paid'],
             ]);
 
+
+            if (!empty(env('SEND_SMS')) && env('SEND_SMS') === true) {
+                SmsJob::dispatch(
+                    $fee->student->guardian_contact,
+                    '201160',
+                    $fee->student->user->name . '|' .
+                        $fee->year_month . ' (Rs.' . (intval($fee->monthly_fees ?? 0)) . ')' .
+                        '|' . $fee->tuition->tuition_name
+                );
+            }
             DB::commit();
             Cache::forget("dashboard_stats_{$tuition_id}");
             return [
@@ -77,6 +93,15 @@ class FeeService
                         'is_paid'      => false,
                     ]);
                     $createdCount++;
+                    if (!empty(env('SEND_SMS')) && env('SEND_SMS') === true) {
+                        SmsJob::dispatch(
+                            $student->guardian_contact,
+                            '201013',
+                            $student->user->name . '|' .
+                                $yearMonth . ' (Rs.' . (intval($student->monthly_fees ?? 0)) . ')' .
+                                '|' . $student->tuition->tuition_name
+                        );
+                    }
                 }
             }
 
