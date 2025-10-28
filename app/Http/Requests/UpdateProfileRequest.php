@@ -34,6 +34,8 @@ class UpdateProfileRequest extends FormRequest
             'address'     => ['sometimes', 'required', 'string', 'max:255'],
             'email'       => ['sometimes', 'required', 'email', 'max:255'],
             'upi_id'       => ['sometimes', 'nullable', 'string', 'max:100'],
+            'generate_fee_sms'       => ['sometimes', 'required', 'boolean'],
+            'mark_fee_paid_sms'       => ['sometimes', 'required', 'boolean'],
         ];
     }
 }

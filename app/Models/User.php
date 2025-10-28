@@ -49,6 +49,8 @@ class User extends Authenticatable implements JWTSubject
         'is_verified',
         'otp',
         'otp_expires_at',
+        'generate_fee_sms',
+        'mark_fee_paid_sms',
     ];
 
     /**

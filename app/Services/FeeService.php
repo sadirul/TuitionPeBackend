@@ -13,9 +13,11 @@ use Illuminate\Support\Facades\DB;
 
 class FeeService
 {
-    public function update(int $tuition_id, array $data)
+    public function update(object $tuition, array $data)
     {
         DB::beginTransaction();
+        $tuition_id = $tuition->id;
+        $mark_fee_paid_sms = $tuition->mark_fee_paid_sms;
 
         try {
             $fee = Fee::where('uuid', $data['fee_uuid'])->where('tuition_id', $tuition_id)->with('student.user:id,name')->with('tuition:id,tuition_name')->firstOrFail();
@@ -30,7 +32,7 @@ class FeeService
             ]);
 
 
-            if (!empty(env('SEND_SMS')) && env('SEND_SMS') === true) {
+            if (!empty(env('SEND_SMS')) && env('SEND_SMS') === true && $mark_fee_paid_sms) {
                 SmsJob::dispatch(
                     $fee->student->guardian_contact,
                     '201160',
@@ -57,10 +59,11 @@ class FeeService
         }
     }
 
-    public function generateFess(int $tuition_id, array $data)
+    public function generateFess(object $tuition, array $data)
     {
         DB::beginTransaction();
-
+        $tuition_id = $tuition->id;
+        $generate_fee_sms = $tuition->generate_fee_sms;
         try {
             $yearMonth  = now()->subMonth()->format('F Y');
 
@@ -93,7 +96,7 @@ class FeeService
                         'is_paid'      => false,
                     ]);
                     $createdCount++;
-                    if (!empty(env('SEND_SMS')) && env('SEND_SMS') === true) {
+                    if (!empty(env('SEND_SMS')) && env('SEND_SMS') === true && $generate_fee_sms) {
                         SmsJob::dispatch(
                             $student->guardian_contact,
                             '201013',

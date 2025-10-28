@@ -23,6 +23,8 @@ class ProfileService
                 'mobile'       => $data['mobile'] ?? $user->mobile,
                 'address'      => $data['address'] ?? $user->address,
                 'email'        => $data['email'] ?? $user->email,
+                'generate_fee_sms'        => $data['generate_fee_sms'] ?? $user->generate_fee_sms,
+                'mark_fee_paid_sms'        => $data['mark_fee_paid_sms'] ?? $user->mark_fee_paid_sms,
             ];
 
             // Only for upi_id

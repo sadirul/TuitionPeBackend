@@ -20,12 +20,12 @@ class FeeController extends Controller
 
     public function update(FeeUpdateRequest $request)
     {
-        return $this->feeService->update($this->request->user()->id, $request->validated());
+        return $this->feeService->update($this->request->user(), $request->validated());
     }
 
     public function generateFess()
     {
-        return $this->feeService->generateFess($this->request->user()->id, $this->request->all());
+        return $this->feeService->generateFess($this->request->user(), $this->request->all());
     }
 
     public function addFees(AddStudentFeesRequest $request)
