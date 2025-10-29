@@ -67,7 +67,9 @@ class DashboardController extends Controller
         return response()->json([
             'status' => 'success',
             'msg' => 'Dashboard data fetched successfully',
-            'data' => $stats
+            'data' => $stats,
+            'SUPPORT_MOBILE_NUMBER' => env('SUPPORT_MOBILE_NUMBER', '917407602125'),
+            'tution_notices' => DB::table('tuition_notices')->latest()->first(),
         ]);
     }
 
