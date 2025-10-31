@@ -31,7 +31,7 @@ class GenerateMonthlyFees extends Command
         DB::beginTransaction();
 
         try {
-            $yearMonth  = now()->subMonth()->format('F Y');
+            $yearMonth  = now()->subMonthNoOverflow()->format('F Y');
 
             // Get only students with active user
             $students = Student::whereHas('user', function ($q) {

@@ -65,7 +65,7 @@ class FeeService
         $tuition_id = $tuition->id;
         $generate_fee_sms = $tuition->generate_fee_sms;
         try {
-            $yearMonth  = now()->subMonth()->format('F Y');
+            $yearMonth  = now()->subMonthNoOverflow()->format('F Y');
 
             $students = Student::where('tuition_id', $tuition_id)
                 ->whereHas('user', function ($q) {

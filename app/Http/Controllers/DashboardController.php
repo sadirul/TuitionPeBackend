@@ -12,7 +12,7 @@ class DashboardController extends Controller
     public function dashboard(Request $request)
     {
         $tuitionId = $request->user()->id;
-        $previousMonth = now()->subMonth()->format('F Y');
+        $previousMonth = now()->subMonthNoOverflow()->format('F Y');
 
         $cacheKey = "dashboard_stats_{$tuitionId}";
 
@@ -86,7 +86,7 @@ class DashboardController extends Controller
             $dateObj = \Carbon\Carbon::createFromFormat('Y-m', $year . '-' . str_pad($month, 2, '0', STR_PAD_LEFT));
             $selectedMonth = $dateObj->format('F Y');
         } else {
-            $selectedMonth = now()->subMonth()->format('F Y');
+            $selectedMonth = now()->subMonthNoOverflow()->format('F Y');
         }
 
 
